@@ -32,20 +32,37 @@ import androidx.activity.compose.setContent
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            MyAppTheme {
-                val navController = rememberNavController()
+// presentation/navigation/Navigation.kt
+@Composable
+fun AppNavigation() {
+    val navController = rememberNavController()
 
-                NavHost(
-                    navController = navController,
-                    startDestination = "city_list"
-                ) {
-                    mainGraph(navController)
+    NavHost(
+        navController = navController,
+        startDestination = Screen.Cities.route
+    ) {
+        composable(Screen.Cities.route) {
+            // Koin автоматически инжектит ViewModel
+            val viewModel: CitiesViewModel by viewModel()
+            CitiesScreen(
+                viewModel = viewModel,
+                onCityClick = { cityId ->
+                    navController.navigate(Screen.CityDetail.createRoute(cityId))
                 }
-            }
+            )
+        }
+        composable(
+            route = Screen.CityDetail.route,
+            arguments = listOf(navArgument("cityId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val viewModel: CityDetailViewModel by viewModel()
+            val cityId = backStackEntry.arguments?.getInt("cityId") ?: 0
+
+            CityDetailScreen(
+                viewModel = viewModel,
+                cityId = cityId,
+                onBackClick = { navController.popBackStack() }
+            )
         }
     }
 }

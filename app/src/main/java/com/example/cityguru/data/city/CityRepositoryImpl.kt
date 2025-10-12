@@ -1,11 +1,11 @@
 package com.example.cityguru.data.city
 
+import com.example.cityguru.data.network.GeoDBApi
 import com.example.cityguru.domain.city.CityRepository
 import com.example.cityguru.domain.model.City
 import com.example.cityguru.domain.model.CityDetail
 import java.io.IOException
 
-// data/repository/CityRepositoryImpl.kt
 class CityRepositoryImpl(
     private val api: GeoDBApi
 ) : CityRepository {
