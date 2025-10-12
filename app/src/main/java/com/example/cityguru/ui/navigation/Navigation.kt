@@ -1,6 +1,5 @@
 package com.example.cityguru.ui.navigation
 
-// navigation/NavGraph.kt
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.NavHostController

@@ -15,15 +15,15 @@ class CityDetailViewModel(
     private val cityDetailInteractor: CityDetailInteractor
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(CityDetailState())
-    val uiState: StateFlow<CityDetailState> = _uiState.asStateFlow()
+    private val _state = MutableStateFlow(CityDetailState())
+    val state: StateFlow<CityDetailState> = _state.asStateFlow()
 
     fun loadCityDetail(cityId: Int) {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, error = null) }
+            _state.update { it.copy(isLoading = true, error = null) }
             try {
                 val cityDetail = cityDetailInteractor(cityId)
-                _uiState.update {
+                _state.update {
                     it.copy(
                         cityDetail = cityDetail,
                         isLoading = false,
@@ -31,7 +31,7 @@ class CityDetailViewModel(
                     )
                 }
             } catch (e: Exception) {
-                _uiState.update {
+                _state.update {
                     it.copy(
                         isLoading = false,
                         error = e.message ?: "Unknown error"

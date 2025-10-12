@@ -1,7 +1,6 @@
 package com.example.cityguru.ui.screens
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScopeInstance.align
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,30 +16,30 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.geocitiesapp.presentation.city_detail.CityDetailViewModel
+import com.example.cityguru.presentation.citydetail.CityDetailViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CityDetailScreen(
     cityId: Int,
-    viewModel: CityDetailViewModel = hiltViewModel(),
+    viewModel: CityDetailViewModel = koinViewModel(),
     onBackClick: () -> Unit
 ) {
-    val state = viewModel.state.value
+    val state by viewModel.state.collectAsState()
     val context = LocalContext.current
 
-    // Загружаем данные при открытии экрана
     LaunchedEffect(cityId) {
         viewModel.loadCityDetail(cityId)
     }
 
-    Scaffold( //каркас экрана
+    Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Информация о городе") },
@@ -53,14 +52,7 @@ fun CityDetailScreen(
         }
     ) { paddingValues ->
         when {
-            state.isLoading -> {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues)
-                        .align(Alignment.CenterHorizontally)
-                )
-            }
+            state.isLoading -> CircularProgressIndicator()
 
             state.error != null -> {
                 Text(
@@ -72,8 +64,8 @@ fun CityDetailScreen(
                 )
             }
 
-            state.city != null -> {
-                Column( // значит, что в вертикально пойдет информация
+            state.cityDetail != null -> {
+                Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(paddingValues)
@@ -87,7 +79,6 @@ fun CityDetailScreen(
                         ) {
 
                             Spacer(modifier = Modifier.height(16.dp))
-                            // Город
                             Column {
                                 Text(
                                     text = "Город",
@@ -95,13 +86,12 @@ fun CityDetailScreen(
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                                 Text(
-                                    text = state.city,
+                                    text = state.cityDetail!!.name,
                                     style = MaterialTheme.typography.bodyMedium
                                 )
                             }
 
                             Spacer(modifier = Modifier.height(16.dp))
-                            // Страна
                             Column {
                                 Text(
                                     text = "Страна",
@@ -109,27 +99,12 @@ fun CityDetailScreen(
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                                 Text(
-                                    text = state.city.country?.toString() ?: "Неизвестно",
+                                    text = state.cityDetail!!.country,
                                     style = MaterialTheme.typography.bodyMedium
                                 )
                             }
 
                             Spacer(modifier = Modifier.height(16.dp))
-                            // Население
-                            Column {
-                                Text(
-                                    text = "Население",
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                                Text(
-                                    text = state.city.population?.toString() ?: "Неизвестно",
-                                    style = MaterialTheme.typography.bodyMedium
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.height(16.dp))
-                            // Высота над уровнем моря
                             Column {
                                 Text(
                                     text = "Высота над уровнем моря",
@@ -137,30 +112,43 @@ fun CityDetailScreen(
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                                 Text(
-                                    text = if (state.city.elevationMeters != null)
-                                        "${state.city.elevationMeters} м"
-                                    else "Неизвестно",
+                                    text = "${state.cityDetail!!.elevationMeters} м",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Column {
+                                Text(
+                                    text = "Население",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                                Text(
+                                    text = state.cityDetail!!.population.toString(),
                                     style = MaterialTheme.typography.bodyMedium
                                 )
                             }
 
                             Spacer(modifier = Modifier.height(8.dp))
 
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // Кнопка Wiki
-                    if (!state.city.wikiDataId.isNullOrEmpty()) {
-                        Button(
-                            onClick = {
-                                val intent = android.content.Intent(
-                                    android.content.Intent.ACTION_VIEW,
-                                    "https://www.wikidata.org/wiki/${state.city.wikiDataId}".toUri()
-                                )
-                                context.startActivity(intent)
-                            },
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text("Открыть в Wikipedia")
+                            Spacer(modifier = Modifier.height(16.dp))
+                            if (!state.cityDetail!!.wikiDataId.isNullOrEmpty()) {
+                                Button(
+                                    onClick = {
+                                        val intent = android.content.Intent(
+                                            android.content.Intent.ACTION_VIEW,
+                                            ("https://www.wikidata.org/wiki/" +
+                                                    "${state.cityDetail!!.wikiDataId}")
+                                                .toUri()
+                                        )
+                                        context.startActivity(intent)
+                                    },
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text("Открыть в Wikipedia")
+                                }
+                            }
                         }
                     }
                 }
