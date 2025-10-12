@@ -78,7 +78,7 @@ fun SearchScreen(
                 if (state.isLoading) {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 } else {
-                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    LazyColumn(modifier = Modifier.fillMaxSize()) { // Аналог из старого Android: RecyclerView
                         items(state.cities) { city ->
                             CityCard(
                                 city = city,
