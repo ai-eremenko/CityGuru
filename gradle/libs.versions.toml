@@ -2,12 +2,14 @@
 agp = "8.2.2"
 kotlin = "1.9.22"
 lifecycleRuntimeComposeAndroid = "2.9.4"
+filamentAndroid = "1.17.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version = "1.12.0" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version = "2.7.0" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version = "1.8.2" }
 androidx-lifecycle-runtime-compose-android = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose-android", version.ref = "lifecycleRuntimeComposeAndroid" }
+filament-android = { group = "com.google.ar.sceneform", name = "filament-android", version.ref = "filamentAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -16,7 +16,7 @@ class CityRepositoryImpl(
                 namePrefix = namePrefix,
                 offset = offset
             )
-            response.data.map { it.toCity() }
+            response.cities.map { it.toCity() }
         } catch (e: Exception) {
             throw handleApiError(e)
         }
@@ -25,7 +25,7 @@ class CityRepositoryImpl(
     override suspend fun getCityDetail(cityId: Int): CityDetail {
         return try {
             val response = api.getCityDetail(cityId)
-            response.data.toCityDetail()
+            response.city.toCityDetail()
         } catch (e: Exception) {
             throw handleApiError(e)
         }

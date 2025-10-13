@@ -1,6 +1,7 @@
 package com.example.cityguru.data.network
 
 import com.example.cityguru.data.dto.CityDetailDto
+import com.example.cityguru.data.dto.responses.CityDetailResponse
 import com.example.cityguru.data.dto.responses.CityResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -18,5 +19,5 @@ interface GeoDBApi {
     @GET("v1/geo/cities/{cityId}")
     suspend fun getCityDetail(
         @Path("cityId") cityId: Int
-    ): CityDetailDto
+    ): CityDetailResponse
 }

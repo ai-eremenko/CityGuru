@@ -3,7 +3,6 @@ package com.example.cityguru.presentation.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cityguru.domain.city.CityInteractor
-import com.example.cityguru.domain.model.City
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +25,7 @@ class SearchViewModel(
     private var canLoadMore = true
 
     init {
-        loadCities() // Загрузка при старте
+        loadCities()
     }
 
     fun onSearchQueryChange(query: String) {
@@ -36,7 +35,6 @@ class SearchViewModel(
                 debounceSearch(query)
             }
         } else if (query.isEmpty()) {
-            // Если строка поиска очищена - показываем первоначальные города
             loadCities(reset = true)
         }
     }
