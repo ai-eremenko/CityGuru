@@ -6,32 +6,25 @@ import androidx.navigation.compose.composable
 import com.example.cityguru.ui.screens.CityDetailScreen
 import com.example.cityguru.ui.screens.SearchScreen
 
-/**
- * Главный граф навигации приложения
- * Определяет все экраны и переходы между ними
- */
 fun NavGraphBuilder.mainGraph(navController: NavHostController) {
-    // Экран поиска городов
-    composable(Screen.Search.route) { // "search" - маршрут к экрану поиска
+
+    composable(Screen.Search.route) {
         SearchScreen(
-            onCityClick = { cityId -> // Обработчик клика по городу
-                // Переход к деталям города с передачей ID
+            onCityClick = { cityId ->
                 navController.navigate(Screen.CityDetail.createRoute(cityId))
             }
         )
     }
 
-    // Экран деталей города
     composable(
-        route = Screen.CityDetail.route, // "city_detail/{cityId}" - маршрут с параметром
-        arguments = Screen.CityDetail.arguments // Список аргументов для маршрута
-    ) { backStackEntry -> // backStackEntry - информация о текущем экране в стеке
+        route = Screen.CityDetail.route,
+        arguments = Screen.CityDetail.arguments
+    ) { backStackEntry -> // информация о текущем экране в стеке
         // Извлекаем cityId из аргументов навигации
         val cityId = backStackEntry.arguments?.getInt("cityId") ?: 0
         CityDetailScreen(
-            cityId = cityId, // Передаем ID города
+            cityId = cityId,
             onBackClick = {
-                // Возврат на предыдущий экран
                 navController.popBackStack()
             }
         )

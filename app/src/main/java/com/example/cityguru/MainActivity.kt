@@ -10,24 +10,16 @@ import androidx.compose.ui.Modifier
 import com.example.cityguru.ui.navigation.AppNavigation
 import com.example.cityguru.ui.theme.CityGuruTheme
 
-/**
- * Главная Activity приложения
- * Устанавливает Compose как основной UI
- */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Устанавливаем Compose контент
         setContent {
-            // Тема приложения
             CityGuruTheme {
-                // Основная поверхность (фон)
                 Surface(
-                    modifier = Modifier.fillMaxSize(), // Занимает весь экран
-                    color = MaterialTheme.colorScheme.background // Цвет фона из темы
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
                 ) {
-                    // Запускаем навигацию приложения
                     AppNavigation()
                 }
             }

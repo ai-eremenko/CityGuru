@@ -70,7 +70,7 @@ fun CityCardPreview() {
     MaterialTheme {
         CityCard(
             city = testCity,
-            onClick = { /* ничего не делаем в превью */ }
+            onClick = { }
         )
     }
 }
