@@ -1,5 +1,6 @@
 package com.example.cityguru.ui.components
 
+import android.R.attr.type
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
