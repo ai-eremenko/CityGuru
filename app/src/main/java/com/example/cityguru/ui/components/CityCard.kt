@@ -1,6 +1,7 @@
 package com.example.cityguru.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,6 +36,7 @@ fun CityCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surface)
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -47,7 +49,7 @@ fun CityCard(
             )
 
             Text(
-                text = city.name,
+                text = city.name + ", " + city.country,
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier
                     .padding(start = 12.dp)
