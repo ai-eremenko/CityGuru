@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.cityguru.ui.theme.Black
 
 @Composable
 fun LoadingIndicator() {
@@ -17,7 +18,9 @@ fun LoadingIndicator() {
             .fillMaxSize()
             .wrapContentSize(Alignment.Center)
     ) {
-        CircularProgressIndicator()
+        CircularProgressIndicator(
+            color = Black
+        )
     }
 }
 

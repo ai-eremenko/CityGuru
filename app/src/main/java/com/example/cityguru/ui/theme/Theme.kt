@@ -1,25 +1,26 @@
 package com.example.cityguru.ui.theme
 
-import android.content.res.Resources
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 
-
-val White = Color(0xFFFFFFFF)
-val Black = Color(0xFF000000)
 
 private val DarkColorScheme = darkColorScheme(
     surface = White,
-    onSurface = Black
+    primary = Black,
+    background = Purple,
+    tertiary = Gray,
+    onSecondary = GrayDark
 )
 
 private val LightColorScheme = lightColorScheme(
     surface = White,
-    onSurface = Black
+    primary = Black,
+    background = Purple,
+    tertiary = Gray,
+    onSecondary = GrayDark
 )
 
 @Composable
