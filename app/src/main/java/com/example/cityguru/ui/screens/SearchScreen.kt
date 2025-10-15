@@ -1,6 +1,5 @@
 package com.example.cityguru.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,7 +39,6 @@ import org.koin.androidx.compose.koinViewModel
 import com.example.cityguru.ui.theme.Gray
 import com.example.cityguru.ui.theme.White
 import com.example.cityguru.ui.theme.Black
-import com.example.cityguru.ui.theme.Purple
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,30 +51,33 @@ fun SearchScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(36.dp),
-                        contentAlignment = Alignment.BottomCenter
-                    ) {
-                        Text(
-                            "Список городов",
-                            style = MaterialTheme.typography.titleLarge,
-                            modifier = Modifier.padding(top = 11.dp)
-                        )
-                    }
-                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = White,
-                    titleContentColor = Black
+            Column {
+                Spacer(modifier = Modifier.height(12.dp))
+                TopAppBar(
+                    title = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(24.dp),
+                            contentAlignment = Alignment.BottomCenter
+                        ) {
+                            Text(
+                                "Список городов",
+                                style = MaterialTheme.typography.titleLarge,
+                                modifier = Modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = White,
+                        titleContentColor = Black
+                    )
                 )
-            )
-        },
+            }
+                 },
         containerColor = White
-    )
-    { innerPadding ->
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -89,7 +90,7 @@ fun SearchScreen(
                 onValueChange = viewModel::onSearchQueryChange,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(horizontal = 16.dp)
                     .background(
                         color = Gray,
                         shape = RoundedCornerShape(16.dp)
@@ -116,8 +117,11 @@ fun SearchScreen(
 
                     )
                 },
+
                 singleLine = true
             )
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             when {
                 uiState.isLoading -> LoadingIndicator()

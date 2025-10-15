@@ -11,7 +11,8 @@ import com.example.cityguru.R
 val Roboto = FontFamily(
     Font(R.font.roboto_medium, FontWeight.Medium),
     Font(R.font.roboto_bold, FontWeight.Bold),
-    Font(R.font.roboto_bold, FontWeight.SemiBold),
+    Font(R.font.roboto_semibold, FontWeight.SemiBold),
+    Font(R.font.roboto_regular, FontWeight.Normal),
 )
 
 val Typography = Typography(
@@ -35,4 +36,11 @@ val Typography = Typography(
         fontSize = 16.sp,
         color = GrayDark
     ),
+
+    bodySmall = TextStyle(
+        fontFamily = Roboto,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        color = GrayDark
+    )
 )

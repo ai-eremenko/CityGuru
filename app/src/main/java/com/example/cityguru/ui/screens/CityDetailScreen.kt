@@ -1,5 +1,6 @@
 package com.example.cityguru.ui.screens
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,15 +15,22 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import com.example.cityguru.R
 import com.example.cityguru.presentation.citydetail.CityDetailViewModel
+import com.example.cityguru.ui.theme.Black
+import com.example.cityguru.ui.theme.White
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,15 +49,43 @@ fun CityDetailScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Информация о городе") },
-                navigationIcon = {
-                    Button(onClick = onBackClick) {
-                        Text("Назад")
-                    }
-                }
-            )
-        }
+            Column {
+                Spacer(modifier = Modifier.height(12.dp))
+                TopAppBar(
+                    title = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(24.dp),
+                            contentAlignment = Alignment.BottomCenter
+                        ) {
+                            Text(
+                                "Информация о городе",
+                                style = MaterialTheme.typography.titleLarge,
+                                modifier = Modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    },
+                    navigationIcon = {
+                        androidx.compose.material3.IconButton(
+                            onClick = onBackClick
+                        ) {
+                            androidx.compose.material3.Icon(
+                                painter = painterResource(id = R.drawable.ic_back),
+                                contentDescription = "Back",
+                                tint = Black
+                            )
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = White,
+                        titleContentColor = Black
+                    )
+                )
+            }
+        },
+        containerColor = White
     ) { paddingValues ->
         when {
             state.isLoading -> CircularProgressIndicator()
@@ -71,14 +107,14 @@ fun CityDetailScreen(
                         .padding(paddingValues)
                         .padding(16.dp)
                 ) {
+                    Spacer(modifier = Modifier.height(16.dp))
+
                     Card(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Column(
                             modifier = Modifier.padding(16.dp)
                         ) {
-
-                            Spacer(modifier = Modifier.height(16.dp))
                             Column {
                                 Text(
                                     text = "Город",
