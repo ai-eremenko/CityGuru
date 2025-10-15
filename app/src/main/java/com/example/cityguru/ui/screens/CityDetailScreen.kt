@@ -1,5 +1,7 @@
 package com.example.cityguru.ui.screens
 
+import android.graphics.Color
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -7,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -28,8 +31,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.example.cityguru.R
+import com.example.cityguru.presentation.citydetail.CityDetailState
 import com.example.cityguru.presentation.citydetail.CityDetailViewModel
 import com.example.cityguru.ui.theme.Black
+import com.example.cityguru.ui.theme.Purple
 import com.example.cityguru.ui.theme.White
 import org.koin.androidx.compose.koinViewModel
 
@@ -87,6 +92,12 @@ fun CityDetailScreen(
         },
         containerColor = White
     ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = White)
+                .padding(paddingValues)
+        ) {
         when {
             state.isLoading -> CircularProgressIndicator()
 
@@ -105,70 +116,76 @@ fun CityDetailScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(paddingValues)
+                        .background(White)
                         .padding(16.dp)
                 ) {
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(18.dp))
 
                     Card(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Column(
-                            modifier = Modifier.padding(16.dp)
+                            modifier = Modifier.padding(horizontal = 16.dp)
                         ) {
                             Column {
                                 Text(
                                     text = "Город",
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    style = MaterialTheme.typography.labelSmall,
                                 )
+
+                                Spacer(modifier = Modifier.height(2.dp))
+
                                 Text(
                                     text = state.cityDetail!!.name,
-                                    style = MaterialTheme.typography.bodyMedium
+                                    style = MaterialTheme.typography.bodySmall
                                 )
                             }
 
-                            Spacer(modifier = Modifier.height(16.dp))
+                            Spacer(modifier = Modifier.height(20.dp))
                             Column {
                                 Text(
                                     text = "Страна",
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    style = MaterialTheme.typography.labelSmall,
                                 )
+
+                                Spacer(modifier = Modifier.height(2.dp))
+
                                 Text(
                                     text = state.cityDetail!!.country,
-                                    style = MaterialTheme.typography.bodyMedium
+                                    style = MaterialTheme.typography.bodySmall
                                 )
                             }
 
-                            Spacer(modifier = Modifier.height(16.dp))
+                            Spacer(modifier = Modifier.height(20.dp))
                             Column {
                                 Text(
                                     text = "Высота над уровнем моря",
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    style = MaterialTheme.typography.labelSmall,
                                 )
+
+                                Spacer(modifier = Modifier.height(2.dp))
+
                                 Text(
                                     text = "${state.cityDetail!!.elevationMeters} м",
-                                    style = MaterialTheme.typography.bodyMedium
+                                    style = MaterialTheme.typography.bodySmall
                                 )
                             }
 
-                            Spacer(modifier = Modifier.height(16.dp))
+                            Spacer(modifier = Modifier.height(20.dp))
                             Column {
                                 Text(
                                     text = "Население",
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    style = MaterialTheme.typography.labelSmall,
                                 )
+
+                                Spacer(modifier = Modifier.height(2.dp))
+
                                 Text(
                                     text = state.cityDetail!!.population.toString(),
-                                    style = MaterialTheme.typography.bodyMedium
+                                    style = MaterialTheme.typography.bodySmall
                                 )
                             }
 
-                            Spacer(modifier = Modifier.height(8.dp))
-
-                            Spacer(modifier = Modifier.height(16.dp))
                             if (!state.cityDetail!!.wikiDataId.isNullOrEmpty()) {
                                 Button(
                                     onClick = {
@@ -180,15 +197,28 @@ fun CityDetailScreen(
                                         )
                                         context.startActivity(intent)
                                     },
-                                    modifier = Modifier.fillMaxWidth()
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp)
+                                    .padding(bottom = 16.dp),
+
+                                    shape = RoundedCornerShape(16.dp),
+
+                                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                                        containerColor = Purple
+                                    )
                                 ) {
-                                    Text("Открыть в Wikipedia")
+                                    Text(
+                                        "Открыть в Wikipedia",
+                                        style = MaterialTheme.typography.labelLarge,
+                                    )
                                 }
                             }
                         }
                     }
                 }
             }
+        }
         }
     }
 }

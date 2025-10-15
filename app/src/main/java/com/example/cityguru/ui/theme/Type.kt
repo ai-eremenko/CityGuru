@@ -41,6 +41,20 @@ val Typography = Typography(
         fontFamily = Roboto,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
-        color = GrayDark
-    )
+        color = Black
+    ),
+
+    labelSmall = TextStyle(
+        fontFamily = Roboto,
+        fontWeight = FontWeight.Medium,
+        fontSize = 16.sp,
+        color = Black
+    ),
+
+    labelLarge = TextStyle(
+        fontFamily = Roboto,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 18.sp,
+        color = White
+    ),
 )
