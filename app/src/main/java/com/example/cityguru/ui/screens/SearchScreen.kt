@@ -39,6 +39,7 @@ import org.koin.androidx.compose.koinViewModel
 import com.example.cityguru.ui.theme.Gray
 import com.example.cityguru.ui.theme.White
 import com.example.cityguru.ui.theme.Black
+import com.example.cityguru.ui.theme.AccentBrand
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -98,8 +99,12 @@ fun SearchScreen(
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     containerColor = Color.Transparent,
                     unfocusedBorderColor = Color.Transparent,
-                    focusedBorderColor = Color.Transparent
+                    focusedBorderColor = AccentBrand,
+                    cursorColor = AccentBrand
                 ),
+
+                shape = RoundedCornerShape(16.dp),
+                textStyle = MaterialTheme.typography.titleMedium ,
 
                 placeholder = {
                     Text(

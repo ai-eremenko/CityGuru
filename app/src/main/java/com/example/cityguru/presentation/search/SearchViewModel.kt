@@ -82,14 +82,4 @@ class SearchViewModel(
             }
         }
     }
-
-    fun loadMoreCities() {
-        if (!uiState.value.isLoading && canLoadMore) {
-            loadCities(_searchQuery.value.ifEmpty { null }, reset = false)
-        }
-    }
-
-    fun retry() {
-        loadCities(_searchQuery.value.ifEmpty { null }, reset = true)
-    }
 }

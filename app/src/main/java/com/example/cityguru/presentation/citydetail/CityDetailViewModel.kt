@@ -38,8 +38,4 @@ class CityDetailViewModel(
             }
         }
     }
-
-    fun retry(cityId: Int) {
-        loadCityDetail(cityId)
-    }
 }
