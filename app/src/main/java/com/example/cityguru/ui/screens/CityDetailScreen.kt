@@ -15,6 +15,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -60,35 +61,23 @@ fun CityDetailScreen(
 
     Scaffold(
         topBar = {
-            Column {
-                Spacer(modifier = Modifier.height(12.dp))
-                TopAppBar(
+                CenterAlignedTopAppBar(
                     title = {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(24.dp)
-                                .padding(horizontal = 16.dp),
-                            contentAlignment = Alignment.Center
+                        Text(
+                            "Информация о городе",
+                            style = MaterialTheme.typography.titleLarge,
+                            textAlign = TextAlign.Center,
+                        )
+                    },
+                    navigationIcon = {
+                        IconButton(
+                            modifier = Modifier.padding(start = 16.dp),
+                            onClick = onBackClick,
                         ) {
-                            IconButton(
-                                onClick = onBackClick,
-                                modifier = Modifier
-                                    .align(Alignment.CenterStart)
-                            ) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_back),
-                                    contentDescription = "Back",
-                                    tint = Black,
-                                )
-                            }
-
-                            Text(
-                                "Информация о городе",
-                                style = MaterialTheme.typography.titleLarge,
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                textAlign = TextAlign.Center,
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_back),
+                                contentDescription = "Back",
+                                tint = Black,
                             )
                         }
                     },
@@ -97,7 +86,6 @@ fun CityDetailScreen(
                         titleContentColor = Black
                     )
                 )
-            }
         },
         containerColor = White
     ) { innerPadding ->
