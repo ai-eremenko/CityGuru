@@ -3,6 +3,7 @@ package com.example.cityguru.presentation.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cityguru.domain.city.CityInteractor
+import com.example.cityguru.domain.model.City
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +24,7 @@ class SearchViewModel(
 
     private var currentOffset = 0
     private var canLoadMore = true
+    private val initialPageSize = 3
 
     init {
         loadCities()
@@ -48,10 +50,12 @@ class SearchViewModel(
         }
     }
 
+
     fun loadCities(namePrefix: String? = null, reset: Boolean = false) {
         if (reset) {
             currentOffset = 0
             canLoadMore = true
+            _uiState.update { it.copy(cities = emptyList()) }
         }
 
         if (!canLoadMore && !reset) return
@@ -59,18 +63,28 @@ class SearchViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             try {
-                val cities = cityInteractor(namePrefix, currentOffset)
+                val allCities = mutableListOf<City>()
+
+                for (i in 0 until initialPageSize) {
+                    val cities = cityInteractor(namePrefix, currentOffset + allCities.size)
+                    allCities.addAll(cities)
+
+                    if (cities.size < 5) {
+                        canLoadMore = false
+                        break
+                    }
+                }
 
                 _uiState.update {
                     it.copy(
-                        cities = if (reset) cities else it.cities + cities,
+                        cities = if (reset) allCities else it.cities + allCities,
                         isLoading = false,
                         error = null
                     )
                 }
 
-                canLoadMore = cities.size == 5
-                currentOffset += 5
+                currentOffset += allCities.size
+                canLoadMore = allCities.size == initialPageSize * 5
 
             } catch (e: Exception) {
                 _uiState.update {
