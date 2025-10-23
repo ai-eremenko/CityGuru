@@ -5,7 +5,6 @@ import com.example.cityguru.di.interactorModule
 import com.example.cityguru.di.networkModule
 import com.example.cityguru.di.repositoryModule
 import com.example.cityguru.di.viewModelModule
-import com.google.android.filament.BuildConfig
 import com.yandex.mapkit.MapKitFactory
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin

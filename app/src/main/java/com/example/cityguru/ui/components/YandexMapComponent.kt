@@ -21,6 +21,8 @@ fun YandexMapComponent(
                 map.isZoomGesturesEnabled = true
                 map.isScrollGesturesEnabled = true
 
+                map.setNightModeEnabled(false)
+
                 onMapViewCreated(this)
 
                 map.move(

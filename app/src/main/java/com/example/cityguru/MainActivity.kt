@@ -1,6 +1,5 @@
 package com.example.cityguru
 
-import android.content.res.Resources
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,7 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.cityguru.ui.navigation.AppNavigation
 import com.example.cityguru.ui.theme.CityGuruTheme
-import com.google.android.filament.Material
+import com.example.cityguru.utils.RequestLocationPermission
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.mapview.MapView
 
@@ -24,6 +23,9 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             CityGuruTheme {
+
+                RequestLocationPermission(
+                    onPermissionGranted = {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -31,9 +33,23 @@ class MainActivity : ComponentActivity() {
                     AppNavigation(
                         onMapViewCreated = { mapView ->
                             this.mapView = mapView
-                        },
+                        }
                     )
                 }
+            },
+                    onPermissionDenied = {
+                        Surface(
+                            modifier = Modifier.fillMaxSize(),
+                            color = MaterialTheme.colorScheme.background
+                        ) {
+                            AppNavigation(
+                                onMapViewCreated = { mapView ->
+                                    this.mapView = mapView
+                                }
+                            )
+                        }
+                    }
+                )
             }
         }
     }
