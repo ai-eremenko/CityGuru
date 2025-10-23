@@ -11,10 +11,16 @@ import androidx.compose.ui.Modifier
 import com.example.cityguru.ui.navigation.AppNavigation
 import com.example.cityguru.ui.theme.CityGuruTheme
 import com.google.android.filament.Material
+import com.yandex.mapkit.MapKitFactory
+import com.yandex.mapkit.mapview.MapView
 
 class MainActivity : ComponentActivity() {
+    private var mapView: MapView? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        MapKitFactory.initialize(this)
 
         setContent {
             CityGuruTheme {
@@ -22,9 +28,25 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AppNavigation()
+                    AppNavigation(
+                        onMapViewCreated = { mapView ->
+                            this.mapView = mapView
+                        },
+                    )
                 }
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        MapKitFactory.getInstance().onStart()
+        mapView?.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mapView?.onStop()
+        MapKitFactory.getInstance().onStop()
     }
 }

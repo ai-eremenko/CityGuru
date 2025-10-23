@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -10,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.cityguru"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -35,16 +36,12 @@ android {
         compose = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.7"
-    }
-
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 
     packaging {
@@ -82,6 +79,7 @@ dependencies {
     implementation(libs.filament.android)
 
     implementation("androidx.appcompat:appcompat:1.6.1")
+    annotationProcessor(libs.androidx.room.compiler)
 
     // Testing
     testImplementation("junit:junit:4.13.2")
@@ -93,7 +91,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     // Яндекс Карты
-    implementation("com.yandex.android:maps.mobile:4.3.1-lite")
+    implementation("com.yandex.android:maps.mobile:4.25.0-lite")
 
     // Для permission запросов
     implementation("androidx.activity:activity-ktx:1.8.0")

@@ -12,10 +12,11 @@ dependencyResolutionManagement {
         mavenCentral()
 
         maven {
-            url = uri("https://jitpack.io")
+            url = uri( "https://maven.google.com/")
         }
     }
 }
 
 rootProject.name = "CityGuru"
 include(":app")
+

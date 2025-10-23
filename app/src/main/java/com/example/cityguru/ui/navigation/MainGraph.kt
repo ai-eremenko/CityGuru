@@ -4,9 +4,14 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.example.cityguru.ui.screens.CityDetailScreen
+import com.example.cityguru.ui.screens.MapScreen
 import com.example.cityguru.ui.screens.SearchScreen
+import com.yandex.mapkit.mapview.MapView
 
-fun NavGraphBuilder.mainGraph(navController: NavHostController) {
+fun NavGraphBuilder.mainGraph(
+    navController: NavHostController,
+    onMapViewCreated: (MapView) -> Unit = {}
+) {
 
     composable(Screen.Search.route) {
         SearchScreen(
@@ -27,6 +32,12 @@ fun NavGraphBuilder.mainGraph(navController: NavHostController) {
             onBackClick = {
                 navController.popBackStack()
             }
+        )
+    }
+
+    composable("map_screen") {
+        MapScreen(
+            onMapViewCreated = onMapViewCreated
         )
     }
 }
