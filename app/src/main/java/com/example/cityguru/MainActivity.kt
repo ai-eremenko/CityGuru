@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.cityguru.ui.navigation.AppNavigation
+import com.example.cityguru.ui.screens.MainScreen
 import com.example.cityguru.ui.theme.CityGuruTheme
 import com.example.cityguru.utils.RequestLocationPermission
 import com.yandex.mapkit.MapKitFactory
@@ -30,7 +31,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AppNavigation(
+                    MainScreen(
                         onMapViewCreated = { mapView ->
                             this.mapView = mapView
                         }
@@ -42,7 +43,7 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.fillMaxSize(),
                             color = MaterialTheme.colorScheme.background
                         ) {
-                            AppNavigation(
+                            MainScreen(
                                 onMapViewCreated = { mapView ->
                                     this.mapView = mapView
                                 }

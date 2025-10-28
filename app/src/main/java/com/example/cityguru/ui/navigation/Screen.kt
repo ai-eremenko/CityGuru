@@ -10,6 +10,7 @@ sealed class Screen(
 ) {
 
     object Search : Screen("search")
+    object Map : Screen("map_screen")
 
     object CityDetail : Screen(
         route = "city_detail/{cityId}",
