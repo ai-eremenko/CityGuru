@@ -1,5 +1,6 @@
 package com.example.cityguru.presentation.search
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cityguru.domain.city.CityInteractor
@@ -15,6 +16,10 @@ import kotlinx.coroutines.launch
 class SearchViewModel(
     private val cityInteractor: CityInteractor
 ) : ViewModel() {
+
+    private companion object {
+        const val TAG = "SearchViewModel"
+    }
 
     private val _uiState = MutableStateFlow(SearchState())
     val uiState: StateFlow<SearchState> = _uiState.asStateFlow()
@@ -52,29 +57,42 @@ class SearchViewModel(
 
 
     fun loadCities(namePrefix: String? = null, reset: Boolean = false) {
+        Log.d(TAG, "loadCities called: namePrefix='$namePrefix', reset=$reset, currentOffset=$currentOffset, canLoadMore=$canLoadMore")
+
         if (reset) {
             currentOffset = 0
             canLoadMore = true
             _uiState.update { it.copy(cities = emptyList()) }
+            Log.d(TAG, "Reset state: offset=$currentOffset, canLoadMore=$canLoadMore")
         }
 
-        if (!canLoadMore && !reset) return
+        if (!canLoadMore && !reset) {
+            Log.d(TAG, "Cannot load more data, returning")
+            return
+        }
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             try {
+                Log.d(TAG, "Starting API call...")
                 val allCities = mutableListOf<City>()
 
                 for (i in 0 until initialPageSize) {
+                    Log.d(TAG, "Batch $i: calling interactor with offset ${currentOffset + allCities.size}")
+
                     val cities = cityInteractor(namePrefix, currentOffset + allCities.size)
+
+                    Log.d(TAG, "Batch $i received ${cities.size} cities")
                     allCities.addAll(cities)
 
                     if (cities.size < 5) {
+                        Log.d(TAG, "Fewer than 5 cities received, stopping pagination")
                         canLoadMore = false
                         break
                     }
                 }
 
+                Log.d(TAG, "Total cities received: ${allCities.size}")
                 _uiState.update {
                     it.copy(
                         cities = if (reset) allCities else it.cities + allCities,
@@ -85,8 +103,10 @@ class SearchViewModel(
 
                 currentOffset += allCities.size
                 canLoadMore = allCities.size == initialPageSize * 5
+                Log.d(TAG, "Updated state: offset=$currentOffset, canLoadMore=$canLoadMore")
 
             } catch (e: Exception) {
+                Log.e(TAG, "Error in loadCities: ${e.message}", e)
                 _uiState.update {
                     it.copy(
                         isLoading = false,

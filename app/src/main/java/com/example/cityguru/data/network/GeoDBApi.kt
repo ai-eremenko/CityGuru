@@ -11,7 +11,7 @@ interface GeoDBApi {
     @GET("v1/geo/cities")
     suspend fun getCities(
         @Query("hateoasMode") hateoasMode: Boolean = false,
-        @Query("limit") limit: Int = 15,
+        @Query("limit") limit: Int = 5,
         @Query("offset") offset: Int = 0,
         @Query("namePrefix") namePrefix: String? = null
     ): CityResponse

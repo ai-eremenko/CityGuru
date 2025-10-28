@@ -1,5 +1,6 @@
 package com.example.cityguru.ui.navigation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -8,6 +9,8 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -16,6 +19,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.cityguru.R
 import com.example.cityguru.ui.theme.Secondary
 import com.example.cityguru.ui.theme.Purple
+import com.example.cityguru.ui.theme.White
 
 @Composable
 fun BottomNavigationBar(
@@ -24,13 +28,24 @@ fun BottomNavigationBar(
     val items = BottomNavItem.items
 
     NavigationBar(
-        modifier = Modifier.height(64.dp),
+        modifier = Modifier
+            .height(64.dp)
+            .background(White)
+            .shadow(
+                elevation = 8.dp,
+                shape = RectangleShape,
+                clip = false
+            ),
+        containerColor = White,
+        tonalElevation = 0.dp
+
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
         items.forEach { item ->
             NavigationBarItem(
+                modifier = Modifier.background(White),
                 label = null,
                 icon = {
                     when (item) {
