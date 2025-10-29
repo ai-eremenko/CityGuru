@@ -208,7 +208,7 @@ fun CityDetailContent(
                 )
             ) {
                 Text(
-                    "Открыть в Wikipedia",
+                    "Открыть в Wikidata",
                     style = MaterialTheme.typography.labelLarge,
                 )
             }

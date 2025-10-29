@@ -20,6 +20,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        MapKitFactory.setLocale("ru_RU")
         MapKitFactory.initialize(this)
 
         setContent {
