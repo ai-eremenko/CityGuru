@@ -26,7 +26,9 @@ fun YandexMapComponent(
                 map.isScrollGesturesEnabled = true
                 map.setNightModeEnabled(false)
 
-                addCitiesFromApiData(cities, onCitySelected)
+                if (cities.isNotEmpty()) {
+                    map.mapObjects.addCitiesFromApiData(cities, onCitySelected, context)
+                }
                 onMapViewCreated(this)
 
                 map.move(

@@ -15,7 +15,8 @@ private val DarkColorScheme = darkColorScheme(
     onSecondary = GrayDark,
     onSurface = AccentBrand,
     onPrimary = BackgroundPressed,
-    onTertiary = Secondary
+    onTertiary = Secondary,
+    surfaceTint = PrimaryBackground
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -26,7 +27,8 @@ private val LightColorScheme = lightColorScheme(
     onSecondary = GrayDark,
     onSurface = AccentBrand,
     onPrimary = BackgroundPressed,
-    onTertiary = Secondary
+    onTertiary = Secondary,
+    surfaceTint = PrimaryBackground
 )
 
 @Composable

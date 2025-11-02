@@ -1,7 +1,5 @@
 package com.example.cityguru.domain.model
 
-import com.yandex.mapkit.geometry.Point
-
 data class CityDetail(
     val id: Int,
     val name: String,
@@ -9,5 +7,7 @@ data class CityDetail(
     val countryCode: String,
     val elevationMeters: Int,
     val population: Int,
-    val wikiDataId: String
+    val wikiDataId: String,
+    val latitude: Double,
+    val longitude: Double,
 )

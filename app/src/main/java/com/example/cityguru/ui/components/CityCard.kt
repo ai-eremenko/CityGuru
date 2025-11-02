@@ -16,11 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.cityguru.R
 import com.example.cityguru.domain.model.City
-import com.example.cityguru.ui.theme.CityGuruTheme
 
 @Composable
 fun CityCard(
@@ -57,23 +55,5 @@ fun CityCard(
                     .weight(1f)
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CityCardPreview() {
-    val testCity = City(
-        id = 1,
-        name = "Berlin",
-        country = "Germany",
-        countryCode = "DE"
-    )
-
-    CityGuruTheme {
-        CityCard(
-            city = testCity,
-            onClick = { }
-        )
     }
 }

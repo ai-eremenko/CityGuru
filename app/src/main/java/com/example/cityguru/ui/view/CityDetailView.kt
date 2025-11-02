@@ -1,4 +1,4 @@
-package com.example.cityguru.ui.screens
+package com.example.cityguru.ui.view
 
 import android.content.Intent
 import androidx.compose.foundation.background
@@ -27,13 +27,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.example.cityguru.R
 import com.example.cityguru.domain.model.CityDetail
 import com.example.cityguru.presentation.citydetail.CityDetailState
-import com.example.cityguru.ui.components.ErrorView
 import com.example.cityguru.ui.components.LoadingIndicator
 import com.example.cityguru.ui.theme.Black
 import com.example.cityguru.ui.theme.Purple
@@ -91,12 +89,12 @@ fun CityDetailView(
                     onRetry = onRetry
                 )
                 state.cityDetail != null -> CityDetailContent(
-                    cityDetail = state.cityDetail!!,
+                    cityDetail = state.cityDetail,
                     onWikipediaClick = {
                         val intent = Intent(
                             Intent.ACTION_VIEW,
                             ("https://www.wikidata.org/wiki/" +
-                                    "${state.cityDetail!!.wikiDataId}")
+                                    "${state.cityDetail.wikiDataId}")
                                 .toUri()
                         )
                         context.startActivity(intent)
@@ -214,24 +212,4 @@ fun CityDetailContent(
             }
         }
     }
-}
-
-@Preview
-@Composable
-private fun CityDetailView_Preview() {
-    CityDetailView(
-        state = CityDetailState(
-            cityDetail = CityDetail(
-                id = 1,
-                name = "Москва",
-                country = "Россия",
-                elevationMeters = 156,
-                population = 12655050,
-                wikiDataId = "Q649",
-                countryCode = "22"
-            )
-        ),
-        onBackClick = {},
-        onRetry = {}
-    )
 }

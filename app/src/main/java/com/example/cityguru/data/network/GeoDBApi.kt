@@ -1,6 +1,5 @@
 package com.example.cityguru.data.network
 
-import com.example.cityguru.data.dto.CityDetailDto
 import com.example.cityguru.data.dto.responses.CityDetailResponse
 import com.example.cityguru.data.dto.responses.CityResponse
 import retrofit2.http.GET
@@ -20,4 +19,12 @@ interface GeoDBApi {
     suspend fun getCityDetail(
         @Path("cityId") cityId: Int
     ): CityDetailResponse
+
+    @GET("v1/geo/locations/{lat}{lng}/nearbyCities")
+    suspend fun getNearbyCities(
+        @Path("lat") lat: Double,
+        @Path("lng") lng: Double,
+        @Query("radius") radius: Int = 50000, // 50km по умолчанию
+        @Query("limit") limit: Int = 20
+    ): CityResponse
 }

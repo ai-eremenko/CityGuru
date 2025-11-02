@@ -4,6 +4,7 @@ kotlin = "2.2.21"
 lifecycleRuntimeComposeAndroid = "2.9.4"
 filamentAndroid = "1.17.1"
 roomCompiler = "2.8.3"
+constraintlayout = "2.2.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version = "1.12.0" }
@@ -12,6 +13,7 @@ androidx-activity-compose = { group = "androidx.activity", name = "activity-comp
 androidx-lifecycle-runtime-compose-android = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose-android", version.ref = "lifecycleRuntimeComposeAndroid" }
 filament-android = { group = "com.google.ar.sceneform", name = "filament-android", version.ref = "filamentAndroid" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

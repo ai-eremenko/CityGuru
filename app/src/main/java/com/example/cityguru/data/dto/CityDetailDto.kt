@@ -3,6 +3,7 @@ package com.example.cityguru.data.dto
 import com.example.cityguru.domain.model.City
 import com.example.cityguru.domain.model.CityDetail
 import com.yandex.mapkit.geometry.Point
+import kotlin.Double
 
 data class CityDetailDto(
     val id: Int,
@@ -22,7 +23,9 @@ data class CityDetailDto(
         countryCode = this.countryCode,
         elevationMeters = this.elevationMeters,
         population = this.population,
-        wikiDataId = this.wikiDataId
+        wikiDataId = this.wikiDataId,
+        latitude = this.latitude,
+        longitude = this.longitude
     )
 
     fun toCity(): City = City(

@@ -13,32 +13,24 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.cityguru.domain.model.City
-import com.example.cityguru.presentation.citydetail.CityDetailState
 import com.example.cityguru.presentation.citydetail.CityDetailViewModel
 import com.example.cityguru.ui.theme.White
-import kotlinx.coroutines.flow.StateFlow
-
-private val Any.population: Any
-private val Any.elevationMeters: String
-private val Any.country: String
-private val Any.name: String
-private val StateFlow<CityDetailState>.cityDetail: Any
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CityDetailBottomSheetContent(
-    city: City?,
-    viewModel: CityDetailViewModel,
+    cityId: Int,
+    viewModel: CityDetailViewModel = koinViewModel(),
     onDismiss: () -> Unit
 ) {
-    val state = viewModel.state
-    val  context = LocalContext.current
+    val state by viewModel.state.collectAsState()
 
-    LaunchedEffect(city?.id) {
-        city?.id?.let { viewModel.loadCityDetail(it) }
+    LaunchedEffect(cityId) {
+         viewModel.loadCityDetail(cityId)
     }
 
     Column(

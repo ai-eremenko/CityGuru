@@ -1,4 +1,4 @@
-package com.example.cityguru.ui.components
+package com.example.cityguru.ui.view
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

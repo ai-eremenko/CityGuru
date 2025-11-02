@@ -79,6 +79,7 @@ dependencies {
     implementation(libs.filament.android)
 
     implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation(libs.androidx.constraintlayout)
     annotationProcessor(libs.androidx.room.compiler)
 
     // Testing

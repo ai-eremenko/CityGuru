@@ -1,4 +1,4 @@
-package com.example.cityguru.ui.screens
+package com.example.cityguru.ui.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -25,13 +25,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.cityguru.R
-import com.example.cityguru.domain.model.City
 import com.example.cityguru.presentation.search.SearchState
 import com.example.cityguru.ui.components.CitiesList
-import com.example.cityguru.ui.components.ErrorView
 import com.example.cityguru.ui.components.LoadingIndicator
 import com.example.cityguru.ui.theme.AccentBrand
 import com.example.cityguru.ui.theme.Black
@@ -139,24 +136,4 @@ fun SearchView(
             }
         }
     }
-}
-
-@Preview
-@Composable
-private fun SearchView_Preview() {
-    SearchView(
-        uiState = SearchState(
-            cities = listOf(
-                City(0, name = "Москва", country = "Россия", countryCode = "99"),
-                City(0, name = "Москва", country = "Россия", countryCode = "99"),
-                City(0, name = "Москва", country = "Россия", countryCode = "99"),
-                City(0, name = "Москва", country = "Россия", countryCode = "99"),
-                City(0, name = "Москва", country = "Россия", countryCode = "99")
-            )
-        ),
-        searchQuery = "",
-        onSearchQueryChanged = {},
-        onCityClick = {},
-        loadCities = {}
-    )
 }

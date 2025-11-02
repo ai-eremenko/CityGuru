@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.example.cityguru.ui.navigation.AppNavigation
 import com.example.cityguru.ui.screens.MainScreen
 import com.example.cityguru.ui.theme.CityGuruTheme
 import com.example.cityguru.utils.RequestLocationPermission
