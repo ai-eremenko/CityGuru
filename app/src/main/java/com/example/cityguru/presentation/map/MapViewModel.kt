@@ -16,19 +16,21 @@ class MapViewModel(
 
     private companion object {
         const val TAG = "MapViewModel"
+        const val DEBOUNCE_DELAY = 500L
     }
 
     private val _state = MutableStateFlow(MapState())
     val state: StateFlow<MapState> = _state.asStateFlow()
 
-    private var currentCenter: Point = Point(55.751574, 37.573856)
-    private var currentZoom: Float = 5.0f
+    private var currentCenter: Point = Point(55.7558, 37.6173)
+    private var currentZoom: Float = 10.0f
 
-    fun onMapRegionChanged(center: Point, zoom: Float) {
+    fun onMapRegionChanged(center:Point, zoom: Float) {
         currentCenter = center
         currentZoom = zoom
+        println("addCitiesFromApiData zoom $zoom")
 
-        if (zoom >= 17) {
+        if (zoom <= 10) {
             loadNearbyCities(center)
         } else {
             _state.update { it.copy(cities = emptyList()) }
@@ -69,16 +71,10 @@ class MapViewModel(
 
     private fun calculateRadius(zoom: Float): Int {
         return when {
-            zoom >= 19 -> 10000  // 10km
-            zoom >= 18 -> 20000  // 20km
-            zoom >= 17 -> 50000  // 50km
-            else -> 50000
-        }
-    }
-
-    fun refreshCities() {
-        if (currentZoom >= 17) {
-            loadNearbyCities(currentCenter)
+            zoom >= 15 -> 100
+            zoom >= 12 -> 50
+            zoom >= 10 -> 20
+            else -> 100
         }
     }
 }

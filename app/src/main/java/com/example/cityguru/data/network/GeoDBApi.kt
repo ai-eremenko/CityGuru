@@ -2,6 +2,7 @@ package com.example.cityguru.data.network
 
 import com.example.cityguru.data.dto.responses.CityDetailResponse
 import com.example.cityguru.data.dto.responses.CityResponse
+import com.example.cityguru.data.dto.responses.NearbyCitiesResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -20,11 +21,11 @@ interface GeoDBApi {
         @Path("cityId") cityId: Int
     ): CityDetailResponse
 
-    @GET("v1/geo/locations/{lat}{lng}/nearbyCities")
+    @GET("v1/geo/locations/{lat}-{lng}/nearbyCities")
     suspend fun getNearbyCities(
         @Path("lat") lat: Double,
         @Path("lng") lng: Double,
-        @Query("radius") radius: Int = 50000, // 50km по умолчанию
-        @Query("limit") limit: Int = 20
-    ): CityResponse
+        @Query("radius") radius: Int = 100,
+        @Query("limit") limit: Int = 10
+    ): NearbyCitiesResponse
 }

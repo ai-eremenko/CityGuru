@@ -37,6 +37,9 @@ fun MapScreen(
 
     Box(modifier = Modifier.fillMaxSize()) {
         YandexMapComponent(
+            onMapRegionChanged = { center, zoom ->
+                mapViewModel.onMapRegionChanged(center, zoom)
+            },
             onMapViewCreated = onMapViewCreated,
             savedInstanceState = savedInstanceState,
             modifier = Modifier.fillMaxSize(),

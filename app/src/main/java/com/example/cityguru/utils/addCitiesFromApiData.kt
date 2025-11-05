@@ -14,7 +14,7 @@ fun MapObjectCollection.addCitiesFromApiData(
 ): List<PlacemarkMapObject> {
     val markerCreator = CityMarkerCreator(context)
     val placemarks = mutableListOf<PlacemarkMapObject>()
-
+    println("addCitiesFromApiData " + cities.size)
     cities.forEach { city ->
         val markerBitmap = markerCreator.createCityMarker(city)
         val placemark = this.addPlacemark(

@@ -6,6 +6,7 @@ import com.example.cityguru.domain.model.City
 import com.example.cityguru.domain.model.CityDetail
 import java.io.IOException
 import android.util.Log
+import java.util.Locale
 
 class CityRepositoryImpl(
     private val api: GeoDBApi
@@ -47,7 +48,12 @@ class CityRepositoryImpl(
 
     override suspend fun getNearbyCities(lat: Double, lng: Double, radius: Int): List<City> {
         return try {
-            val response = api.getNearbyCities(lat, lng, radius)
+
+            val response = api.getNearbyCities(
+                lat = lat,
+                lng = lng,
+                radius = radius
+            )
             response.cities.map { it.toCity() }
         } catch (e: Exception) {
             throw handleApiError(e)
