@@ -21,11 +21,12 @@ interface GeoDBApi {
         @Path("cityId") cityId: Int
     ): CityDetailResponse
 
-    @GET("v1/geo/locations/{lat}-{lng}/nearbyCities")
+    @GET("v1/geo/locations/{lat}{lng}/nearbyCities")
     suspend fun getNearbyCities(
-        @Path("lat") lat: Double,
-        @Path("lng") lng: Double,
+        @Path("lat") lat: String,
+        @Path("lng") lng: String,
         @Query("radius") radius: Int = 100,
-        @Query("limit") limit: Int = 10
+        @Query("limit") limit: Int = 10,
+        @Query("_t") cacheBuster: String? = null
     ): NearbyCitiesResponse
 }

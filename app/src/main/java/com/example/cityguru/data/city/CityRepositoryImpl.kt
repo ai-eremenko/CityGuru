@@ -46,17 +46,37 @@ class CityRepositoryImpl(
         }
     }
 
-    override suspend fun getNearbyCities(lat: Double, lng: Double, radius: Int): List<City> {
+    override suspend fun getNearbyCities(
+        lat: Double,
+        lng: Double,
+        radius: Int,
+        requestId: String?
+    ): List<City> {
+        Log.d("MAP_REPOSITORY_DEBUG", "Repository: getNearbyCities called with " +
+                "lat=$lat, lng=$lng, radius=$radius, requestId=$requestId")
         return try {
-
+            Log.d("MAP_REPOSITORY_DEBUG", "Making API call...")
+            val latForApi = if (lat > 0) {
+                "+$lat"
+            } else {
+                "$lat"
+            }
+            val lngForApi = if (lng > 0) {
+                "+$lng"
+            } else {
+                "$lng"
+            }
             val response = api.getNearbyCities(
-                lat = lat,
-                lng = lng,
-                radius = radius
+                lat = latForApi,
+                lng = lngForApi,
+                radius = radius,
+                cacheBuster = requestId ?: System.currentTimeMillis().toString()
             )
+            Log.d("MAP_REPOSITORY_DEBUG", "API response received: ${response.cities.size} cities")
             response.cities.map { it.toCity() }
         } catch (e: Exception) {
-            throw handleApiError(e)
+            Log.e("MAP_REPOSITORY_DEBUG", "❌ API call FAILED", e)
+            emptyList()
         }
     }
 }

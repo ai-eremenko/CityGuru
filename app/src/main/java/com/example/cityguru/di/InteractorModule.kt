@@ -10,6 +10,8 @@ import org.koin.dsl.module
 
 val interactorModule = module {
     single<CityInteractor> { CityInteractorImpl(get()) }
+
     single<MapInteractor> { MapInteractorImpl(get()) }
+
     single<CityDetailInteractor> { CityDetailInteractorImpl(get()) }
 }

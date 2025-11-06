@@ -1,6 +1,7 @@
 package com.example.cityguru.ui.components
 
 import android.os.Bundle
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -29,6 +30,14 @@ fun YandexMapComponent(
 ) {
     var mapViewHolder by remember { mutableStateOf<MapView?>(null) }
 
+    LaunchedEffect(cities) {
+        val mapView = mapViewHolder ?: return@LaunchedEffect
+        mapView.map.mapObjects.clear()
+        if (cities.isNotEmpty()) {
+            mapView.map.mapObjects.addCitiesFromApiData(cities, onCitySelected, mapView.context)
+        }
+    }
+
     AndroidView(
         factory = { context ->
             val mapView = MapView(context).apply {
@@ -44,10 +53,16 @@ fun YandexMapComponent(
                         cameraUpdateReason: CameraUpdateReason,
                         finished: Boolean
                     ) {
-                        onMapRegionChanged(
-                            cameraPosition.target,
-                            cameraPosition.zoom
+                        Log.d(
+                            "MAP_CAMERA_DEBUG", "Camera changed: finished=$finished, " +
+                                    "zoom=${cameraPosition.zoom}, target=${cameraPosition.target}"
                         )
+                        if (finished) {
+                            onMapRegionChanged(
+                                cameraPosition.target,
+                                cameraPosition.zoom
+                            )
+                        }
                     }
                 })
 
@@ -57,16 +72,7 @@ fun YandexMapComponent(
             mapView
         },
         update = { mapView ->
-            mapView.map.mapObjects.clear()
-            if (cities.isNotEmpty()) {
-                mapView.map.mapObjects.addCitiesFromApiData(cities, onCitySelected, mapView.context)
-            }
         },
         modifier = modifier
     )
-    LaunchedEffect(cities) {
-        val mapView = mapViewHolder ?: return@LaunchedEffect
-        mapView.map.mapObjects.clear()
-        mapView.map.mapObjects.addCitiesFromApiData(cities, onCitySelected, mapView.context)
-    }
 }
