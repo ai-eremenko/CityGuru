@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cityguru.domain.map.MapInteractor
+
 import com.yandex.mapkit.geometry.Point
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -38,6 +39,7 @@ class MapViewModel(
         loadCitiesJob?.cancel()
 
         loadCitiesJob = viewModelScope.launch {
+            loadCitiesJob?.join()
             delay(300) // Только дебаунс, без сложной логики
 
             if (isSignificantChange(center, zoom)) {
@@ -56,7 +58,24 @@ class MapViewModel(
 
         // Проверяем только зум (простая логика)
         val zoomDiff = Math.abs(newZoom - lastZoom)
-        return zoomDiff >= 1.0f // Увеличил порог до 1.0 для меньшего количества запросов
+        val distance = calculateDistance(lastCenter, newCenter)
+        return zoomDiff >= 0.2f || distance >= 20.0 // Увеличил порог до 1.0 для меньшего количества запросов
+
+    }
+
+    private fun calculateDistance(point1: Point, point2: Point): Double {
+        val earthRadius = 6371.0 // km
+
+        val dLat = Math.toRadians(point2.latitude - point1.latitude)
+        val dLon = Math.toRadians(point2.longitude - point1.longitude)
+
+        val a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(Math.toRadians(point1.latitude)) * Math.cos(Math.toRadians(point2.latitude)) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2)
+
+        val c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+
+        return earthRadius * c
     }
 
     private suspend fun handleRegionChange(center: Point, zoom: Float) {
@@ -132,9 +151,10 @@ class MapViewModel(
 
     private fun calculateRadius(zoom: Float): Int {
         val radius = when {
-            zoom <= 5.0f -> 300
-            zoom <= 7.0f -> 150
-            zoom <= 9.0f -> 50
+            zoom <= 3.0f -> 100  // Для очень маленького зума - большой радиус
+            zoom <= 5.0f -> 80
+            zoom <= 7.0f -> 50
+            zoom <= 9.0f -> 20   // Увеличено с 50
             else -> 20
         }
         Log.d("MAPVM_DEBUG", "📐 Рассчитан радиус: $radius км для zoom: $zoom")
