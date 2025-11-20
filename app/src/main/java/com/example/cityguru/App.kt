@@ -1,10 +1,11 @@
 package com.example.cityguru
 
 import android.app.Application
-import com.example.cityguru.di.interactorModule
-import com.example.cityguru.di.networkModule
-import com.example.cityguru.di.repositoryModule
-import com.example.cityguru.di.viewModelModule
+import com.example.cityguru.data.dataModule
+import com.example.cityguru.domain.interactorModule
+import com.example.cityguru.feauture.citydetail.cityDetailModule
+import com.example.cityguru.feauture.map.mapModule
+import com.example.cityguru.feauture.search.searchModule
 import com.yandex.mapkit.MapKitFactory
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -17,7 +18,13 @@ class App : Application() {
 
         startKoin {
             androidContext(this@App)
-            modules(networkModule, repositoryModule, interactorModule, viewModelModule)
+            modules(
+                dataModule,
+                interactorModule,
+                cityDetailModule,
+                mapModule,
+                searchModule
+            )
         }
     }
 }

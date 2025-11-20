@@ -2,7 +2,7 @@ package com.example.cityguru.utils
 
 import android.content.Context
 import com.example.cityguru.domain.model.City
-import com.example.cityguru.presentation.map.CityMarkerCreator
+import com.example.cityguru.feauture.map.CityMarkerCreator
 import com.yandex.mapkit.map.MapObjectCollection
 import com.yandex.mapkit.map.PlacemarkMapObject
 import com.yandex.runtime.image.ImageProvider
