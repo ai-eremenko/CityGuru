@@ -4,12 +4,15 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cityguru.domain.map.MapInteractor
+import com.example.cityguru.domain.model.City
 import com.yandex.mapkit.geometry.Point
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -18,12 +21,11 @@ class MapViewModel(
     private val mapInteractor: MapInteractor
 ) : ViewModel() {
 
-    init {
-        Log.d("MAPVM_DEBUG", "✅ MapViewModel created with interactor: $mapInteractor")
-    }
-
     private val _state = MutableStateFlow(MapState())
     val state: StateFlow<MapState> = _state.asStateFlow()
+
+    private val _sideEffect = MutableSharedFlow<MapSideEffect>()
+    val sideEffect = _sideEffect.asSharedFlow()
 
     private var currentCenter: Point = Point(55.7558, 37.6173)
     private var currentZoom: Float = 10.0f
@@ -32,17 +34,32 @@ class MapViewModel(
     private var lastProcessedCenter: Point? = null
     private var lastProcessedZoom: Float? = null
 
+    fun onEvent(event: MapEvent) {
+        when (event) {
+            is MapEvent.OnCityFlagClicked -> OnCityFlagClicked(event.city)
+        }
+    }
+
+    private fun OnCityFlagClicked(city: City){
+        viewModelScope.launch {
+            _sideEffect.emit(MapSideEffect.OnCityFlagClicked(city))
+        }
+    }
+
     fun onMapRegionChanged(center: Point, zoom: Float) {
         currentCenter = center
         currentZoom = zoom
 
         loadCitiesJob?.cancel()
+        Log.d("MAPVM_DEBUG", "🔄 Предыдущая job отменена")
 
         loadCitiesJob = viewModelScope.launch {
+            Log.d("MAPVM_DEBUG", "⏳ Запуск debounce корутины...")
             loadCitiesJob?.join()
             delay(300) // Только дебаунс, без сложной логики
 
             if (isSignificantChange(center, zoom)) {
+                Log.d("MAPVM_DEBUG", "✅ Изменения значительные, обрабатываем...")
                 lastProcessedCenter = center
                 lastProcessedZoom = zoom
                 handleRegionChange(center, zoom)
@@ -79,73 +96,56 @@ class MapViewModel(
     }
 
     private suspend fun handleRegionChange(center: Point, zoom: Float) {
-        Log.d("MAPVM_DEBUG", "🔄 handleRegionChange - center: (${center.latitude}, ${center.longitude}), zoom: $zoom")
 
-        // Обновляем последние обработанные значения
         lastProcessedCenter = center
         lastProcessedZoom = zoom
 
         if (zoom <= 10.0f) {
-            Log.d("MAPVM_DEBUG", "🗺  Zoom $zoom <= 10 - загружаем города")
             loadNearbyCities(center, zoom)
         } else {
-            Log.d("MAPVM_DEBUG", "🔍 Zoom $zoom > 10 - очищаем список городов")
             _state.update { it.copy(cities = emptyList()) }
         }
     }
 
     private suspend fun loadNearbyCities(center: Point, zoom: Float) {
-        Log.d("MAPVM_DEBUG", "📍 loadNearbyCities - START")
 
         val radius = calculateRadius(zoom)
-        Log.d("MAPVM_DEBUG", "🎯 Параметры запроса: " +
-                "lat=${center.latitude}, lng=${center.longitude}, radius=$radius км, zoom=$zoom")
+        Log.d("MAPVM_DEBUG", "📡 Загрузка городов: center=$center, zoom=$zoom, radius=$radius km")
 
         val requestId = "${center.latitude}_${center.longitude}_${radius}_${System.currentTimeMillis()}"
-        Log.d("MAPVM_DEBUG", "🎯 Параметры запроса: " +
-                "lat=${center.latitude}, lng=${center.longitude}, radius=$radius км, zoom=$zoom, requestId=$requestId")
 
         try {
-            _state.update { it.copy(isLoading = true, error = null) }
-            Log.d("MAPVM_DEBUG", "⏳ Состояние обновлено: isLoading=true")
+            _state.update { it.copy() }
 
+            Log.d("MAPVM_DEBUG", "🌐 Вызов mapInteractor.getNearbyCities...")
             val cities = mapInteractor.getNearbyCities(
                 lat = center.latitude,
                 lng = center.longitude,
                 radius = radius,
-                requestId = requestId // Добавьте этот параметр в метод getNearbyCities
+                requestId = requestId
             )
 
-            Log.d("MAPVM_DEBUG", "✅ УСПЕХ: Загружено ${cities.size} городов")
+            Log.d("MAPVM_DEBUG", "✅ Получено ${cities.size} городов:")
             cities.forEachIndexed { index, city ->
                 Log.d("MAPVM_DEBUG", "   ${index + 1}. ${city.name} (${city.point.latitude}, ${city.point.longitude})")
             }
 
             _state.update {
                 it.copy(
-                    cities = cities,
-                    isLoading = false,
-                    error = null
+                    cities = cities
                 )
             }
-            Log.d("MAPVM_DEBUG", "🎉 Состояние обновлено: cities=${cities.size}, isLoading=false")
 
         } catch (e: Exception) {
             if (e is CancellationException) {
-                Log.d("MAPVM_DEBUG", "✅ Запрос отменен (expected)")
+                Log.d("MAPVM_DEBUG", "🚫 Запрос отменен")
                 return
             }
 
-            Log.e("MAPVM_DEBUG", "❌ ОШИБКА при загрузке городов: ${e.message}", e)
             _state.update {
-                it.copy(
-                    isLoading = false,
-                    error = "Ошибка загрузки городов: ${e.message ?: "Неизвестная ошибка"}"
-                )
+                it.copy()
             }
-            Log.d("MAPVM_DEBUG", "⚠️  Состояние обновлено: isLoading=false, error=${e.message}")
         } finally {
-            Log.d("MAPVM_DEBUG", "📍 loadNearbyCities - END")
         }
     }
 
@@ -157,7 +157,6 @@ class MapViewModel(
             zoom <= 9.0f -> 20   // Увеличено с 50
             else -> 20
         }
-        Log.d("MAPVM_DEBUG", "📐 Рассчитан радиус: $radius км для zoom: $zoom")
         return radius
     }
 }

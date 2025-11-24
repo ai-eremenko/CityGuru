@@ -1,6 +1,5 @@
 package com.example.cityguru.feauture.map.view
 
-import android.os.Bundle
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -11,6 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.cityguru.domain.model.City
+import com.example.cityguru.feauture.map.MapEvent
 import com.example.cityguru.utils.addCitiesFromApiData
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraListener
@@ -23,10 +23,9 @@ import com.yandex.mapkit.mapview.MapView
 fun YandexMapComponent(
     onMapRegionChanged: (Point, Float) -> Unit,
     onMapViewCreated: (MapView) -> Unit,
-    savedInstanceState: Bundle?,
     modifier: Modifier = Modifier,
     cities: List<City> = emptyList(),
-    onCitySelected: (City) -> Unit = {}
+    onEvent: (MapEvent) -> Unit
 ) {
     var mapViewHolder by remember { mutableStateOf<MapView?>(null) }
 
@@ -34,7 +33,12 @@ fun YandexMapComponent(
         val mapView = mapViewHolder ?: return@LaunchedEffect
         mapView.map.mapObjects.clear()
         if (cities.isNotEmpty()) {
-            mapView.map.mapObjects.addCitiesFromApiData(cities, onCitySelected, mapView.context)
+            mapView.map.mapObjects.addCitiesFromApiData(
+                cities,
+                onCitySelected={ city ->
+                    onEvent(MapEvent.OnCityFlagClicked(city))
+                },
+                mapView.context)
         }
     }
 
@@ -70,8 +74,6 @@ fun YandexMapComponent(
             }
             mapViewHolder = mapView
             mapView
-        },
-        update = { mapView ->
         },
         modifier = modifier
     )
